@@ -148,7 +148,7 @@ export default function App() {
               </svg>
             </motion.div>
             <motion.h2 variants={fadeUp} className="text-[32px] lg:text-[40px] xl:text-[48px] leading-[1.2] font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500 mb-6 lg:mb-8 tracking-tight">
-              Digital Nomad.<br className="hidden md:block"/> Digital Hamster.
+              Digital Nomad.<br className="hidden md:block" /> Digital Hamster.
             </motion.h2>
             <motion.p variants={fadeUp} className="text-[16px] lg:text-[18px] xl:text-[20px] leading-[1.8] text-[var(--color-text-secondary)] mb-10 max-w-2xl xl:max-w-3xl font-light">
               在工具、界面与创作之间持续探索，享受从想法到成品的打磨过程。偏爱简洁清晰的表达，也相信好的体验不只是功能完整，更是使用时那种自然、顺畅又恰到好处的感觉。
