@@ -1,40 +1,59 @@
-name: Publish Hexo Web
+name: Publish Web
+
 on:
   push:
     branches:
       - source
+  pull_request:
+    branches:
+      - source
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: source
-          fetch-depth: 2
-          submodules: true
+      - name: Checkout source
+        uses: actions/checkout@v6
 
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
         with:
-          node-version: 12
+          version: 10
 
-      - name: Install dependencies & Build web
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        env:
+          TZ: Asia/Shanghai
+        run: pnpm install --frozen-lockfile
+
+      - name: Check and build
         env:
           TZ: Asia/Shanghai
         run: |
-          cd themes/material
-          pwd
-          yarn install --production
-          cd ../../
-          pwd
-          yarn install --production
-          yarn run build
+          pnpm run lint
+          pnpm run build
 
-      - name: Deploy Github
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Publish to master
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.HEXO_BLOG_TOKEN }}
-          publish_dir: ./public
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
           publish_branch: master
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"

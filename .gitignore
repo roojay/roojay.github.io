@@ -1,5 +1,8 @@
-*.log
 node_modules/
-public/
-.deploy*/
-.vscode/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
